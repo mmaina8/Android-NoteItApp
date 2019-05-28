@@ -29,6 +29,7 @@
         >
 
         <EditText
+            android:background="@drawable/bg_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Title..."
@@ -36,6 +37,8 @@
             />
 
         <EditText
+            android:paddingTop="5dp"
+            android:background="@drawable/bg_note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Note..."
@@ -78,9 +81,8 @@
         </LinearLayout>
 
         <Button
-
             android:textColor="@android:color/white"
-            android:background="@color/colorAccent"
+            android:background="@drawable/bg_button_pink"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Save"
