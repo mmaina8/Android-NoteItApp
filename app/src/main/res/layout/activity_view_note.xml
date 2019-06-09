@@ -88,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:src="@drawable/ic_my_location_black_24dp"
+            android:src="@drawable/ic_gps_fixed_black_36dp"
             android:textAllCaps="false"/>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -118,7 +118,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_play_circle_outline_black_24dp"
+                android:src="@drawable/ic_play_circle_outline_black_36dp"
                 android:paddingLeft="15dp"
                 />
 
