@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -26,6 +27,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     ListView listview;
+    List<Note> noteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +49,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayNotes() {
         DatabaseHelper databaseHelper = new DatabaseHelper(getBaseContext(),"notes",null,1);
-        List<Note> noteList = new ArrayList<Note>();
+        noteList = new ArrayList<Note>();
         noteList = databaseHelper.getNotes();
         Log.d("mynotes","My database has " + noteList.size() + " notes");
         NotesAdapter notesAdapter = new NotesAdapter(getBaseContext(),0,noteList);
         listview.setAdapter(notesAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Note clickedNote = noteList.get(position);
+                Intent intent = new Intent(getBaseContext(), ViewNote.class);
+                intent.putExtra("NOTE_ID", clickedNote.getId());
+                startActivity(intent);
+            }
+        });
     }
 
     private void displayNames() {

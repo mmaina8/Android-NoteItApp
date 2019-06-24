@@ -54,4 +54,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.close();
         return notesList;
     }
+
+    public Note getNoteById(int id) {
+        Note note = new Note();
+        String query = "SELECT * FROM notes WHERE id = ?"; //define query
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery(query, new String[]{String.valueOf(id)});
+        if (cursor.moveToFirst()==true) {
+            note.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            note.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+            note.setNoteText(cursor.getString(cursor.getColumnIndex("noteText")));
+        }
+
+        sqLiteDatabase.close();
+        return note;
+    }
 }
