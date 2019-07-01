@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.solution.database.DatabaseHelper;
@@ -17,6 +18,7 @@ public class ViewNote extends AppCompatActivity {
     TextView tvTitle;
     TextView tvNoteText;
     int noteId;
+    Button btnDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,17 @@ public class ViewNote extends AppCompatActivity {
 
         tvTitle = findViewById(R.id.tvTitle);
         tvNoteText = findViewById(R.id.tvNoteText);
+        btnDelete=findViewById(R.id.btnDelete);
         displayNote();
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseHelper databaseHelper=new DatabaseHelper(getBaseContext(),"notes",null,1);
+                databaseHelper.deleteNote(noteId);
+                finish();
+            }
+        });
 
 //        FloatingActionButton fab = findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
