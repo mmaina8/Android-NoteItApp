@@ -69,7 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.close();
         return note;
     }
-    public  void deleteNote(int id){
+    public void deleteNote(int id){
         SQLiteDatabase sqLiteDatabase=this.getReadableDatabase();
         String tableName="notes";
         String whereClause="id=?";
@@ -77,4 +77,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.delete(tableName,whereClause,whereArgs);
 
     }
+
+//    public void editNote(int id){
+//        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+//        String tableName="notes";
+//        String whereClause="id=?";
+//        String[]whereArgs=new String[]{String.valueOf(id)};
+//        sqLiteDatabase.update(tableName,whereClause,whereArgs);
+//    }
+
+    public int updateNote(Note note){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("title", note.getTitle());
+        contentValues.put("noteText", note.getNoteText());
+        String whereClause="id=?";
+        String[]whereArgs=new String[]{String.valueOf(note.getId())};
+
+        return sqLiteDatabase.update("notes",contentValues,whereClause,whereArgs);
+    }
+
+//    public int updateNote(Note note) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        ContentValues values = new ContentValues();
+//        values.put(Note.COLUMN_NOTE, note.getNote());
+//
+//        // updating row
+//        return db.update(Note.TABLE_NAME, values, Note.COLUMN_ID + " = ?",
+//                new String[]{String.valueOf(note.getId())});
+//    }
+
 }

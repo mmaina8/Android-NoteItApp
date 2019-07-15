@@ -1,5 +1,6 @@
 package com.example.solution;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +20,7 @@ public class ViewNote extends AppCompatActivity {
     TextView tvNoteText;
     int noteId;
     Button btnDelete;
+    Button btnEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class ViewNote extends AppCompatActivity {
         tvTitle = findViewById(R.id.tvTitle);
         tvNoteText = findViewById(R.id.tvNoteText);
         btnDelete=findViewById(R.id.btnDelete);
+        btnEdit = findViewById(R.id.btnEdit);
         displayNote();
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -39,6 +42,16 @@ public class ViewNote extends AppCompatActivity {
                 DatabaseHelper databaseHelper=new DatabaseHelper(getBaseContext(),"notes",null,1);
                 databaseHelper.deleteNote(noteId);
                 finish();
+            }
+        });
+
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnEdit=findViewById(R.id.btnEdit);
+                Intent intent = new Intent(getBaseContext(), EditNoteActivity.class);
+                intent.putExtra("NOTE_ID", noteId);
+                startActivity(intent);
             }
         });
 

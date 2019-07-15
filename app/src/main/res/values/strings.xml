@@ -5,4 +5,5 @@
     <string name="title_activity_view_note">View Note</string>
 
     <string name="ViewNote">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores ea inventore laboriosam, minus neque omnis quas qui sint ullam. Corporis cupiditate doloremque in magni sapiente! Animi nulla sequi soluta vero?</string>
+    <string name="title_activity_edit_note">EditNoteActivity</string>
 </resources>
