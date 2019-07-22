@@ -3,21 +3,18 @@ package com.example.solution;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.solution.adapters.NotesAdapter;
+import com.example.solution.asynctask.GetJsonFromUrlTask;
 import com.example.solution.database.DatabaseHelper;
 import com.example.solution.database.Note;
 
@@ -45,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         listview = findViewById(R.id.lvListView);
+
+        String url = "https://akirachixnotesapi.herokuapp.com/api/v1/notes/";
+        GetJsonFromUrlTask getNotesList=new GetJsonFromUrlTask(this,url,null,"red");
+        getNotesList.execute();
     }
 
     private void displayNotes() {

@@ -1,16 +1,11 @@
 package com.example.solution;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,23 +13,37 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.solution.database.DatabaseHelper;
 import com.example.solution.database.Note;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class AddNoteActivity extends AppCompatActivity {
 
-    EditText etTitle;
-    EditText etNote;
-    Button btnAddPhoto;
-    Button btnAddVoiceNote;
-    Button btnSave;
-    String noteText;
-    String title;
-    ImageView imgView;
+    private EditText etTitle;
+    private EditText etNote;
+    private Button btnAddPhoto;
+    private Button btnAddVoiceNote;
+    private Button btnSave;
+    private String noteText;
+    private String title;
+    private ImageView imgView;
     private Uri fileUri;
     private static final int CAPTURE_IMAGE_REQUEST_CODE=500;
+    private String NOTES_API_URL="https://akirachixnotesapi.herokuapp.com/api/v1/notes";
+    private String TAG="NOTES_API_RESPONSE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +83,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 long rows = databaseHelper.addNote(note);
                 Log.d("AddNote","The number of notes is "+rows);
                 finish();
+                postNote(title, noteText);
 
             }
         });
@@ -88,5 +98,39 @@ public class AddNoteActivity extends AppCompatActivity {
             Bitmap bitmap=(Bitmap)bundle.get("data");
             imgView.setImageBitmap(bitmap);
         }
+    }
+
+    private void postNote (final String title, final String noteText) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, NOTES_API_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    int id = jsonObject.getInt("id");
+                    String title=jsonObject.getString("title");
+                    String noteText=jsonObject.getString("noteText");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.e(TAG, volleyError.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String>params=new HashMap<String, String>();
+                params.put("title", title);
+                params.put("noteText", noteText);
+                return params;
+
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
+        requestQueue.add(stringRequest);
     }
 }
