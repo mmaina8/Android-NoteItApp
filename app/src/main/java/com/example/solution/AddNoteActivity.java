@@ -110,6 +110,10 @@ public class AddNoteActivity extends AppCompatActivity {
                     int id = jsonObject.getInt("id");
                     String title=jsonObject.getString("title");
                     String noteText=jsonObject.getString("noteText");
+                    Note note = new Note(id, title, noteText);
+                    DatabaseHelper databaseHelper = new DatabaseHelper(getBaseContext(),"notes", null, 1);
+                    long rows = databaseHelper.addNote(note);
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -13,18 +13,34 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.solution.adapters.NotesAdapter;
-import com.example.solution.asynctask.GetJsonFromUrlTask;
 import com.example.solution.database.DatabaseHelper;
 import com.example.solution.database.Note;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+//import com.example.solution.asynctask.GetJsonFromUrlTask;
 
 public class MainActivity extends AppCompatActivity {
 
     ListView listview;
     List<Note> noteList;
+
+    private String GET_NOTES_API_URL="https://akirachixnotesapi.herokuapp.com/api/v1/notes";
+    private String TAG="NOTES_API_RESPONSE";
+
+    String url = "https://akirachixnotesapi.herokuapp.com/api/v1/notes/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
         listview = findViewById(R.id.lvListView);
 
-        String url = "https://akirachixnotesapi.herokuapp.com/api/v1/notes/";
-        GetJsonFromUrlTask getNotesList=new GetJsonFromUrlTask(this,url,null,"red");
-        getNotesList.execute();
     }
 
     private void displayNotes() {
@@ -108,5 +121,38 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private List<Note> getNotes () {
+        final List<Note> noteList = new ArrayList<>();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, GET_NOTES_API_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("tag",response);
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i=0; i<jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        int id = jsonObject.getInt("id");
+                        String title = jsonObject.getString("title");
+                        String noteText = jsonObject.getString("noteText");
+                        Note note = new Note(id, title, noteText);
+                        noteList.add(note);
+                    }
+                }
+                catch (JSONException e) {
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.e("error", volleyError.getMessage());
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
+        requestQueue.add(stringRequest);
+        return noteList;
     }
 }
